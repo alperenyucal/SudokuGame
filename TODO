@@ -1,0 +1,19 @@
+TODO
+
+add error checking
+add utility buttons
+design the store
+add settings
+minimal api for just serving sudokus
+
+
+
+
+DONE
+fix input types
+fix initial interactions
+minimal menu
+add initial cells
+add winning condition
+change initial cell colors
+add input types
