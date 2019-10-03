@@ -1,11 +1,11 @@
 cc.Class({
-    extends: cc.Component,
+  extends: cc.Component,
 
-    start() {
-        this.node.on(cc.Node.EventType.TOUCH_START, (e) => {
-            scene.loadScene("SudokuGame");
-            console.log(scene.sceneStack);
-        });
-    }
+  start() {
+    this.node.on(cc.Node.EventType.TOUCH_START, (e) => {
+      scene.loadScene("SudokuGame");
+      console.log(scene.sceneStack);
+    });
+  }
 
 });
