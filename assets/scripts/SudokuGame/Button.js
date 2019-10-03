@@ -22,12 +22,11 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_START, (e) => {
             let sn = cc.find("Canvas/Sudoku");
             let sc = sn.getComponent("Sudoku");
-            if (sc.inputMethod == "ButtonFirst") {
+            if (sc.inputMethod === "ButtonFirst") {
                 let s = sc.selectedCell;
                 sc.grid[s.row][s.column].setNumber(this.number);
-                sn.emit("sudoku-changed");
             }
-            else if (sc.inputMethod == "CellFirst") {
+            else if (sc.inputMethod === "CellFirst") {
                 sc.selectedButton = sc.selectedButton == this.number ? null : this.number;
             }
         });

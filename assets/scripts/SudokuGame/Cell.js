@@ -17,8 +17,10 @@ cc.Class({
             this.number = number;
             let label = this.node.getChildByName("Label").getComponent(cc.Label);
             label.string = this.number != null ? this.number : "";
-            let sudoku =cc.find("Canvas/Sudoku").getComponent("Sudoku").sudoku;
-            sudoku[this.row][this.column] = number;
+            let sn = cc.find("Canvas/Sudoku");
+            let sc = sn.getComponent("Sudoku");
+            sc.sudoku[this.row][this.column] = number;
+            sn.emit("sudoku-changed", this);
         }
     },
 
@@ -47,13 +49,13 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_START, (e) => {
             let sn = cc.find("Canvas/Sudoku");
             let sc = sn.getComponent("Sudoku");
-            if (sc.inputMethod == "ButtonFirst") {
+
+            if (sc.inputMethod === "ButtonFirst") {
                 sc.selectedCell = this;
             }
-            else if (sc.inputMethod == "CellFirst") {
+            else if (sc.inputMethod === "CellFirst") {
                 let s = this.number == sc.selectedButton ? null : sc.selectedButton;
                 this.setNumber(s);
-                sn.emit("sudoku-changed");
             }
 
             this.sudoku = cc.find("Canvas/Sudoku").getComponent("Sudoku").sudoku;

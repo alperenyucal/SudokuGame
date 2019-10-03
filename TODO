@@ -2,14 +2,15 @@ TODO
 
 add error checking
 add utility buttons
+polish the UI
 design the store
 add settings
 minimal api for just serving sudokus
 
 
 
-
 DONE
+add navigation
 fix input types
 fix initial interactions
 minimal menu

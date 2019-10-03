@@ -1,4 +1,4 @@
-import { gridsEqual } from "./lib/sudoku-tools"
+import { gridsEqual, isValid } from "../lib/sudoku-tools"
 
 cc.Class({
     extends: cc.Component,
@@ -124,6 +124,9 @@ cc.Class({
         this.node.on("sudoku-changed", (e) => {
             if (gridsEqual(this.size, this.sudoku, this.sudoku_complete))
                 cc.director.loadScene("GameFinished");
+            console.log("sudoku-changed");
+            //if (isValid(this.sudoku, this.box_sequence, e.number, e.row, e.column))
+            //    console.log("valid");
         });
     },
 
