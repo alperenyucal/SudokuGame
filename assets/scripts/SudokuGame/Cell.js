@@ -49,16 +49,19 @@ cc.Class({
     this.node.on(cc.Node.EventType.TOUCH_START, (e) => {
       let sn = cc.find("Canvas/Sudoku");
       let sc = sn.getComponent("Sudoku");
-
-      if (sc.inputMethod === "ButtonFirst") {
-        sc.selectedCell = this;
+      if (sc.deleteMode){
+        this.setNumber(null);
+        console.log(sc.deleteMode)
       }
-      else if (sc.inputMethod === "CellFirst") {
-        let s = this.number == sc.selectedButton ? null : sc.selectedButton;
-        this.setNumber(s);
+      else {
+        if (sc.inputMethod === "ButtonFirst") {
+          sc.selectedCell = this;
+        }
+        else if (sc.inputMethod === "CellFirst") {
+          let s = this.number == sc.selectedButton ? null : sc.selectedButton;
+          this.setNumber(s);
+        }
       }
-
-      this.sudoku = cc.find("Canvas/Sudoku").getComponent("Sudoku").sudoku;
     });
 
 

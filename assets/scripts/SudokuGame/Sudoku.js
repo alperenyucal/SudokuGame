@@ -1,4 +1,4 @@
-import { gridsEqual, isValid } from "../lib/sudoku-tools"
+import { gridsEqual } from "../lib/sudoku-tools"
 
 cc.Class({
   extends: cc.Component,
