@@ -17,7 +17,7 @@ cc.Class({
 
   ctor() {
     this.selectedCell;
-    this.selectedButton = null;
+    this.selectedButton = 1;
     this.sudoku = [[null, null, null, 5, 3], [5, null, 4, null, 1], [3, 2, 5, null, 4], [4, null, 2, null, 5], [1, 5, 3, 4, 2]];
     this.sudoku_complete = [[2, 4, 1, 5, 3], [5, 3, 4, 2, 1], [3, 2, 5, 1, 4], [4, 1, 2, 3, 5], [1, 5, 3, 4, 2]];
     this.box_sequence = [[0, 0, 0, 1, 1], [0, 0, 1, 1, 1], [2, 2, 2, 3, 3], [2, 2, 4, 3, 3], [4, 4, 4, 4, 3]];
@@ -25,6 +25,35 @@ cc.Class({
     this.grid = [...Array(this.size)].map(e => Array(this.size).fill(null));
     this.initials = this.sudoku.map(row => row.map(i => { if (i != null) return true }));
   },
+
+
+  cellHandler(cell) {
+    if (this.inputMethod === "ButtonFirst") {
+      this.selectedCell = cell;
+    }
+    else if (this.inputMethod === "CellFirst") {
+      let s = cell.number == this.selectedButton ? null : this.selectedButton;
+      if (cell.setNumber(s)) {
+        this.sudoku[cell.row][cell.column] = s;
+        this.node.emit("sudoku-changed");
+      };
+    }
+  },
+
+
+  buttonHandler(button) {
+    if (this.inputMethod === "ButtonFirst") {
+      let s = this.selectedCell;
+      if (this.grid[s.row][s.column].setNumber(button.number)) {
+        this.sudoku[cell.row][cell.column] = button.number;
+        this.node.emit("sudoku-changed");
+      }
+    }
+    else if (this.inputMethod === "CellFirst") {
+      this.selectedButton = this.selectedButton == button.number ? null : button.number;
+    }
+  },
+
 
   renderGrid() {
 
@@ -47,11 +76,11 @@ cc.Class({
         cell.row = i;
         cell.column = j;
 
-        if (this.initials[i][j])
-          cell.isInitial = true;
+        if (this.initials[i][j]) cell.isInitial = true;
 
         cellNode.name = "cell" + i.toString() + j.toString();
         cellNode.setPosition(x, y);
+        cellNode.on(cc.Node.EventType.TOUCH_START, () => { this.cellHandler(cell) });
 
         this.node.addChild(cellNode);
         this.grid[i][j] = cell;
@@ -64,6 +93,7 @@ cc.Class({
 
     this.selectedCell = this.grid[0][0];
   },
+
 
   createBoxBorders() {
 
@@ -119,16 +149,10 @@ cc.Class({
     this.renderGrid();
     this.createBoxBorders();
 
-    this.node.on("sudoku-changed", (e) => {
+    this.node.on("sudoku-changed", () => {
       if (gridsEqual(this.size, this.sudoku, this.sudoku_complete))
         cc.director.loadScene("GameFinished");
-      console.log("sudoku-changed");
-      //if (isValid(this.sudoku, this.box_sequence, e.number, e.row, e.column))
-      //    console.log("valid");
     });
   },
-
-  update() {
-
-  }
+  
 });

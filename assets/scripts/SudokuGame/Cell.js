@@ -17,17 +17,14 @@ cc.Class({
       this.number = number;
       let label = this.node.getChildByName("Label").getComponent(cc.Label);
       label.string = this.number != null ? this.number : "";
-      let sn = cc.find("Canvas/Sudoku");
-      let sc = sn.getComponent("Sudoku");
-      sc.sudoku[this.row][this.column] = number;
-      sn.emit("sudoku-changed", this);
+      return true;
     }
+    return false;
   },
 
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
-
 
     this.node.width = this.node.height = this.width;
 
@@ -44,27 +41,6 @@ cc.Class({
     labelNode.setPosition(this.width / 2, this.width / 2);
 
     labelNode.color = this.isInitial ? cc.color(0, 0, 0, 255) : cc.color(0, 0, 150, 150);
-
-
-    this.node.on(cc.Node.EventType.TOUCH_START, (e) => {
-      let sn = cc.find("Canvas/Sudoku");
-      let sc = sn.getComponent("Sudoku");
-      if (sc.deleteMode){
-        this.setNumber(null);
-        console.log(sc.deleteMode)
-      }
-      else {
-        if (sc.inputMethod === "ButtonFirst") {
-          sc.selectedCell = this;
-        }
-        else if (sc.inputMethod === "CellFirst") {
-          let s = this.number == sc.selectedButton ? null : sc.selectedButton;
-          this.setNumber(s);
-        }
-      }
-    });
-
-
   },
 
 });

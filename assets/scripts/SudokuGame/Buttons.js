@@ -22,6 +22,7 @@ cc.Class({
 
     let x = -width / 2;
 
+    let sc = cc.find("Canvas/Sudoku").getComponent("Sudoku");
     for (let i = 0; i < size; i++) {
 
       let buttonNode = cc.instantiate(this.buttonPrefab);
@@ -30,6 +31,8 @@ cc.Class({
       let button = buttonNode.getComponent("Button");
       button.width = buttonWidth;
       button.number = i + 1;
+
+      buttonNode.on(cc.Node.EventType.TOUCH_START, (e) => { sc.buttonHandler(button) });
 
       this.node.addChild(buttonNode);
 
