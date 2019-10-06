@@ -1127,7 +1127,7 @@
     "cellPrefab": {
       "__uuid__": "0beb2b04-ea9e-476e-993a-b45dfc53faaa"
     },
-    "inputMethod": "ButtonFirst",
+    "inputMethod": "CellFirst",
     "_id": "7eXW/2IdVKjoaI1TZpfRgl"
   },
   {

@@ -1,10 +1,14 @@
-export default class Scene {
+const Scene = class {
 	constructor() {
-		this.mainScene = cc.director.getScene().name;
-		this.sceneStack = [this.mainScene];
+		this.clear();
 	};
 
 	loadScene(sceneName, callback) {
+		if (this.sceneStack.length == 0) {
+			this.mainScene = cc.director.getScene().name;
+			this.sceneStack.push(this.mainScene);
+		}
+
 		cc.director.loadScene(sceneName, callback);
 		this.sceneStack.push(sceneName);
 	};
@@ -14,12 +18,22 @@ export default class Scene {
 			let sceneName = this.sceneStack[this.sceneStack.length - 2];
 			this.sceneStack.pop();
 			cc.director.loadScene(sceneName);
+
+			if (this.sceneStack.length == 1)
+				this.clear();
 		}
 	}
 
 	goHome() {
 		this.loadScene(this.mainScene);
-		this.sceneStack.slice(0, 1);
+		this.clear();
+	}
+
+	clear() {
+		this.mainScene = null;
+		this.sceneStack = [];
 	}
 
 };
+
+window.scene = new Scene();
