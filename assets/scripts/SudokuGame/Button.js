@@ -7,8 +7,8 @@ cc.Class({
     selected: false
   },
 
-  setSelected() {
-    if (this.selected == false) {
+  setSelected(selected) {
+    if (selected) {
       this.selected = true;
       var action = cc.scaleTo(0.2, 1.5);
       this.node.runAction(action);

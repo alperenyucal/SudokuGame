@@ -18,10 +18,10 @@ cc.Class({
   ctor() {
     this.selectedCell;
     this.selectedButton = null;
-    this.sudoku=[[3, 5, null, null, 9, 6, null, 8, 7], [null, 6, null, 7, 8, 1, 5, 3, 9], [null, 8, 7, null, null, null, 1, null, 2], [5, 2, 6, null, 3, null, 9, null, 4], [null, null, null, null, 6, null, null, 5, 3], [null, 9, 3, 5, 1, null, null, null, null], [null, null, 5, 9, 2, 3, 7, null, 8], [7, 4, 2, null, null, null, 3, null, 1], [null, null, null, null, null, 4, 6, 2, 5]]
-    this.sudoku_complete=[[3, 5, 1, 2, 9, 6, 4, 8, 7], [2, 6, 4, 7, 8, 1, 5, 3, 9], [9, 8, 7, 3, 4, 5, 1, 6, 2], [5, 2, 6, 8, 3, 7, 9, 1, 4], [1, 7, 8, 4, 6, 9, 2, 5, 3], [4, 9, 3, 5, 1, 2, 8, 7, 6], [6, 1, 5, 9, 2, 3, 7, 4, 8], [7, 4, 2, 6, 5, 8, 3, 9, 1], [8, 3, 9, 1, 7, 4, 6, 2, 5]]
+    this.sudoku = [[3, 5, null, null, 9, 6, null, 8, 7], [null, 6, null, 7, 8, 1, 5, 3, 9], [null, 8, 7, null, null, null, 1, null, 2], [5, 2, 6, null, 3, null, 9, null, 4], [null, null, null, null, 6, null, null, 5, 3], [null, 9, 3, 5, 1, null, null, null, null], [null, null, 5, 9, 2, 3, 7, null, 8], [7, 4, 2, null, null, null, 3, null, 1], [null, null, null, null, null, 4, 6, 2, 5]]
+    this.sudoku_complete = [[3, 5, 1, 2, 9, 6, 4, 8, 7], [2, 6, 4, 7, 8, 1, 5, 3, 9], [9, 8, 7, 3, 4, 5, 1, 6, 2], [5, 2, 6, 8, 3, 7, 9, 1, 4], [1, 7, 8, 4, 6, 9, 2, 5, 3], [4, 9, 3, 5, 1, 2, 8, 7, 6], [6, 1, 5, 9, 2, 3, 7, 4, 8], [7, 4, 2, 6, 5, 8, 3, 9, 1], [8, 3, 9, 1, 7, 4, 6, 2, 5]]
     this.box_sequence = [[0, 0, 0, 1, 1, 1, 2, 2, 2], [0, 0, 0, 1, 1, 1, 2, 2, 2], [0, 0, 0, 1, 1, 1, 2, 2, 2], [3, 3, 3, 4, 4, 4, 5, 5, 5], [3, 3, 3, 4, 4, 4, 5, 5, 5], [3, 3, 3, 4, 4, 4, 5, 5, 5], [6, 6, 6, 7, 7, 7, 8, 8, 8], [6, 6, 6, 7, 7, 7, 8, 8, 8], [6, 6, 6, 7, 7, 7, 8, 8, 8]]
-  
+
     /*this.sudoku = [[null, null, null, 5, 3], [5, null, 4, null, 1], [3, 2, 5, null, 4], [4, null, 2, null, 5], [1, 5, 3, 4, 2]];
     this.sudoku_complete = [[2, 4, 1, 5, 3], [5, 3, 4, 2, 1], [3, 2, 5, 1, 4], [4, 1, 2, 3, 5], [1, 5, 3, 4, 2]];
     this.box_sequence = [[0, 0, 0, 1, 1], [0, 0, 1, 1, 1], [2, 2, 2, 3, 3], [2, 2, 4, 3, 3], [4, 4, 4, 4, 3]];*/
@@ -41,10 +41,12 @@ cc.Class({
       this.selectedCell = cell;
     }
     else if (this.inputMethod === "CellFirst") {
-      let number = cell.number == this.selectedButton ? null : this.selectedButton;
-      cell.setNumber(number, () => {
-        this.setSudokuCell(cell.row, cell.column, number);
-      });
+      if (this.selectedButton != null) {
+        let number = cell.number == this.selectedButton.number ? null : this.selectedButton.number;
+        cell.setNumber(number, () => {
+          this.setSudokuCell(cell.row, cell.column, number);
+        });
+      }
     };
   },
 
@@ -57,8 +59,18 @@ cc.Class({
       })
     }
     else if (this.inputMethod === "CellFirst") {
-      this.selectedButton = this.selectedButton == button.number ? null : button.number;
-      button.setSelected();
+      if (this.selectedButton != null)
+        this.selectedButton.setSelected(false);
+
+
+      if (this.selectedButton == button) {
+        this.selectedButton = null;
+        button.setSelected(false);
+      }
+      else {
+        this.selectedButton = button
+        button.setSelected(true);
+      }
     }
   },
 
