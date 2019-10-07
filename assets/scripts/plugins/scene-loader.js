@@ -25,7 +25,7 @@ const Scene = class {
 	}
 
 	goHome() {
-		this.loadScene(this.mainScene);
+		cc.director.loadScene(this.mainScene);
 		this.clear();
 	}
 

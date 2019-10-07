@@ -3,9 +3,22 @@ cc.Class({
 
   properties: {
     width: 50,
-    number: 0
+    number: 0,
+    selected: false
   },
 
+  setSelected() {
+    if (this.selected == false) {
+      this.selected = true;
+      var action = cc.scaleTo(0.2, 1.5);
+      this.node.runAction(action);
+    }
+    else {
+      this.selected = false;
+      var action = cc.scaleTo(0.2, 1);
+      this.node.runAction(action);
+    };
+  },
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
@@ -14,10 +27,7 @@ cc.Class({
     let labelNode = this.node.getChildByName("Label")
     labelNode.color = cc.color(0, 0, 255, 255);
 
-    labelNode.setPosition(this.width / 2, this.width / 2);
-
     let label = this.node.getChildByName("Label").getComponent(cc.Label);
     label.string = this.number != null ? this.number : "";
-
   }
 });

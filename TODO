@@ -1,13 +1,15 @@
 TODO
-
-add error checking
-add utility buttons
 redesign input buttons
+add utility buttons
 polish the UI
 design the store
 add settings
 minimal api for just serving sudokus
 
+
+FUTURE
+add error checking
+add CellFirst input method
 
 
 DONE

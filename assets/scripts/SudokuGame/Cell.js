@@ -12,14 +12,13 @@ cc.Class({
     this.column = 0;
   },
 
-  setNumber(number) {
+  setNumber(number, callback) {
     if (!this.isInitial) {
       this.number = number;
       let label = this.node.getChildByName("Label").getComponent(cc.Label);
       label.string = this.number != null ? this.number : "";
-      return true;
+      typeof callback === 'function' && callback();
     }
-    return false;
   },
 
   // LIFE-CYCLE CALLBACKS:

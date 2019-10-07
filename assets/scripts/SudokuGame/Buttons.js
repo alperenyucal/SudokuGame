@@ -7,22 +7,21 @@ cc.Class({
       default: null,
       type: cc.Prefab
     },
-    width: 360
   },
 
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
 
-    let size = 5;
+    let sc = cc.find("Canvas/Sudoku").getComponent("Sudoku");
+    let size = sc.size;
 
-    let width = this.width;
+    let width = this.node.width;
     let buttonWidth = 40;
     let paddingWidth = (width - size * buttonWidth) / (size - 1);
 
-    let x = -width / 2;
+    let x = (-width / 2) + (buttonWidth / 2);
 
-    let sc = cc.find("Canvas/Sudoku").getComponent("Sudoku");
     for (let i = 0; i < size; i++) {
 
       let buttonNode = cc.instantiate(this.buttonPrefab);
