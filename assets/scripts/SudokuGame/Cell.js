@@ -4,7 +4,8 @@ cc.Class({
   properties: {
     width: 50,
     number: null,
-    isInitial: false
+    isInitial: false,
+    error: false
   },
 
   ctor() {
@@ -18,6 +19,20 @@ cc.Class({
       let label = this.node.getChildByName("Label").getComponent(cc.Label);
       label.string = this.number != null ? this.number : "";
       typeof callback === 'function' && callback();
+    }
+  },
+
+  setError(error) {
+    if (!this.isInitial) {
+      let labelNode = this.node.getChildByName("Label");
+      if (error) {
+        this.error = true;
+        labelNode.color = cc.color(255, 0, 0, 150);
+      }
+      else {
+        this.error = false;
+        labelNode.color = cc.color(0, 0, 150, 150);
+      };
     }
   },
 

@@ -1,18 +1,21 @@
 TODO
-redesign input buttons
+add timer
+expand the menu
+add settings
+add CellFirst input method
 add utility buttons
 polish the UI
-design the store
-add settings
-minimal api for just serving sudokus
 
 
 FUTURE
-add error checking
-add CellFirst input method
+api for serving sudokus
+fix scene load delay
 
 
 DONE
+add error checking
+design the store
+redesign input buttons
 add navigation
 fix input types
 fix initial interactions
