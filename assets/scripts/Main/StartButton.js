@@ -12,8 +12,12 @@ cc.Class({
         let newSudoku = jsonAsset.json[index]
         store.setState({
           currentSudoku: Object.assign(newSudoku, {
-            initials: newSudoku.finalized.map(row => row.map(i => { if (i != null) return true }))
-          })
+            initials: newSudoku.finalized.map(row => row.map(i => { if (i != null) return true })),
+          }),
+          currentTime: {
+            mins: 0,
+            secs: 0
+          }
         });
 
         scene.loadScene("SudokuGame");

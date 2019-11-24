@@ -1,6 +1,6 @@
 {
   "android-instant": {
-    "REMOTE_SERVER_ROOT": "",
+    "REMOTE_SERVER_ROOT": "http://192.168.1.101:7456/preview-android-instant/",
     "host": "",
     "packageName": "org.cocos2d.SudokuGame",
     "pathPattern": "",
@@ -18,7 +18,7 @@
   "encryptJs": true,
   "excludeScenes": [],
   "fb-instant-games": {},
-  "includeSDKBox": true,
+  "includeSDKBox": false,
   "inlineSpriteFrames": true,
   "inlineSpriteFrames_native": true,
   "md5Cache": false,
@@ -47,15 +47,5 @@
     "subContext": ""
   },
   "xxteaKey": "becfaa67-6f36-40",
-  "zipCompressJs": true,
-  "android": {
-    "packageName": "org.cocos2d.SudokuGame"
-  },
-  "ios": {
-    "packageName": "org.cocos2d.SudokuGame"
-  },
-  "mac": {
-    "packageName": "org.cocos2d.SudokuGame"
-  },
-  "win32": {}
+  "zipCompressJs": true
 }

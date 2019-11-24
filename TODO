@@ -1,9 +1,11 @@
 TODO
-add timer
-expand the menu
+add notes
+add selected number highlighting
 add settings
+add pause
 add CellFirst input method
 add utility buttons
+expand the menu
 polish the UI
 
 
@@ -13,6 +15,7 @@ fix scene load delay
 
 
 DONE
+add timer
 add error checking
 design the store
 redesign input buttons

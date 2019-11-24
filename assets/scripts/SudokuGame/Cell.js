@@ -5,12 +5,14 @@ cc.Class({
     width: 50,
     number: null,
     isInitial: false,
-    error: false
+    error: false,
+    size: 9
   },
 
   ctor() {
     this.row = 0;
     this.column = 0;
+    this.notes = [...Array(this.size)].fill(null);
   },
 
   setNumber(number, callback) {
@@ -27,11 +29,11 @@ cc.Class({
       let labelNode = this.node.getChildByName("Label");
       if (error) {
         this.error = true;
-        labelNode.color = cc.color(255, 0, 0, 150);
+        labelNode.color = cc.color(255, 0, 0);
       }
       else {
         this.error = false;
-        labelNode.color = cc.color(0, 0, 150, 150);
+        labelNode.color = cc.color(0, 0, 150);
       };
     }
   },
@@ -47,14 +49,18 @@ cc.Class({
     let ctx = boxNode.addComponent(cc.Graphics);
     ctx.lineWidth = 1;
     ctx.lineCap = cc.Graphics.LineCap.ROUND;
-    ctx.strokeColor = cc.color(0, 0, 0, 255);
+    ctx.strokeColor = cc.color(0, 0, 0);
     ctx.rect(0, 0, this.width, this.width);
     ctx.stroke();
 
     let labelNode = this.node.getChildByName("Label")
     labelNode.setPosition(this.width / 2, this.width / 2);
 
-    labelNode.color = this.isInitial ? cc.color(0, 0, 0, 255) : cc.color(0, 0, 150, 150);
+    labelNode.color = this.isInitial ? cc.color(0, 0, 0) : cc.color(0, 0, 150);
+  },
+
+  start(){
+
   },
 
 });

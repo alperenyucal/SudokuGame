@@ -18,7 +18,7 @@ cc.Class({
   ctor() {
     this.selectedCell;
     this.selectedButton = null;
-
+    this.eraseMode = false;
   },
 
 
@@ -35,7 +35,12 @@ cc.Class({
 
 
   cellHandler(cell) {
-    if (this.inputMethod === "ButtonFirst") {
+    if (this.eraseMode) {
+      cell.setNumber(null, () => {
+        this.setSudokuCell(cell.row, cell.column, null);
+      });
+    }
+    else if (this.inputMethod === "ButtonFirst") {
       this.selectedCell = cell;
     }
     else if (this.inputMethod === "CellFirst") {
@@ -57,6 +62,7 @@ cc.Class({
       })
     }
     else if (this.inputMethod === "CellFirst") {
+      this.eraseMode = false;
       if (this.selectedButton != null)
         this.selectedButton.setSelected(false);
 
@@ -93,6 +99,7 @@ cc.Class({
         cell.setNumber(sudoku[i][j]);
         cell.row = i;
         cell.column = j;
+        cell.size = size;
 
         if (this.initials[i][j]) cell.isInitial = true;
 
@@ -159,7 +166,7 @@ cc.Class({
     }
     ctx.lineWidth = 5;
     ctx.lineCap = cc.Graphics.LineCap.ROUND;
-    ctx.strokeColor = cc.color(0, 0, 0, 255);
+    ctx.strokeColor = cc.color(0, 0, 0);
     ctx.stroke();
   },
 
@@ -174,13 +181,26 @@ cc.Class({
     this.initials = cs.initials;
 
     this.size = this.sudoku.length;
+
+  },
+
+
+  start() {
+
     this.grid = [...Array(this.size)].map(e => Array(this.size).fill(null));
 
     this.node.on("sudoku-changed", (c) => {
 
-      let errors = allErrors(this.sudoku, this.box_sequence);
+      if (gridsEqual(this.size, this.sudoku, this.sudoku_complete)) {
+        cc.director.loadScene("GameFinished");
+        store.setState({ currentSudoku: null })
+      }
+    });
 
-      //console.log(errors);
+
+    this.node.on("sudoku-changed", (c) => {
+
+      let errors = allErrors(this.sudoku, this.box_sequence);
 
       for (let i = 0; i < this.size; i++) {
         for (let j = 0; j < this.size; j++) {
@@ -190,12 +210,8 @@ cc.Class({
             this.grid[i][j].setError(false);
         }
       }
-
-      if (gridsEqual(this.size, this.sudoku, this.sudoku_complete)) {
-        cc.director.loadScene("GameFinished");
-        store.setState({ currentSudoku: null })
-      }
     });
+
 
     this.renderGrid();
     this.createBoxBorders();
