@@ -181,7 +181,6 @@ cc.Class({
     this.initials = cs.initials;
 
     this.size = this.sudoku.length;
-
   },
 
 
@@ -215,7 +214,6 @@ cc.Class({
 
     this.renderGrid();
     this.createBoxBorders();
-
   },
 
 });

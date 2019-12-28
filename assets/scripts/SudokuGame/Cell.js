@@ -47,20 +47,17 @@ cc.Class({
     let boxNode = new cc.Node("Box");
     boxNode.parent = this.node;
     let ctx = boxNode.addComponent(cc.Graphics);
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 1.5;
     ctx.lineCap = cc.Graphics.LineCap.ROUND;
     ctx.strokeColor = cc.color(0, 0, 0);
     ctx.rect(0, 0, this.width, this.width);
     ctx.stroke();
 
-    let labelNode = this.node.getChildByName("Label")
-    labelNode.setPosition(this.width / 2, this.width / 2);
-
-    labelNode.color = this.isInitial ? cc.color(0, 0, 0) : cc.color(0, 0, 150);
   },
 
-  start(){
-
+  start() {
+    let labelNode = this.node.getChildByName("Label");
+    labelNode.color = this.isInitial ? cc.color(0, 0, 0) : cc.color(0, 0, 150);
   },
 
 });
