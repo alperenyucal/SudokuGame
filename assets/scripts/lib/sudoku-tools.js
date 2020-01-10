@@ -1,3 +1,4 @@
+/** Compare two sudoku grids */
 export function gridsEqual(size, grid1, grid2) {
   for (let row = 0; row < size; row++)
     for (let col = 0; col < size; col++)

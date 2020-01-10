@@ -15,10 +15,16 @@ const Store = class {
 
   setState(newState) {
     Object.assign(this.state, newState);
-    this.saveState();
   }
 }
 
 let savedState = JSON.parse(cc.sys.localStorage.getItem("state"));
 
 window.store = savedState != null ? new Store(savedState) : new Store({});
+
+let saveLocal = () => {
+  store.saveState();
+  setTimeout(saveLocal, 5000);
+}
+
+setTimeout(saveLocal, 5000)

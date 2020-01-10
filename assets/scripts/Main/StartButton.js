@@ -19,7 +19,7 @@ cc.Class({
             secs: 0
           }
         });
-
+        store.saveState();
         scene.loadScene("SudokuGame");
       });
     });

@@ -24,7 +24,7 @@ cc.Class({
 
   setSudokuCell(row, column, number) {
     this.sudoku[row][column] = number;
-    store.saveState();
+    store.setState({ currentSudoku: Object.assign({}, store.state.currentSudoku, { finalized: this.sudoku }) });
     this.node.emit("sudoku-changed", {
       row: row,
       column: column,
@@ -79,6 +79,15 @@ cc.Class({
   },
 
 
+  checkErrors() {
+    let errors = allErrors(this.sudoku, this.box_sequence);
+
+    for (let i = 0; i < this.size; i++)
+      for (let j = 0; j < this.size; j++)
+        this.grid[i][j].setError(errors[i][j]);
+
+  },
+
   renderGrid() {
 
     let size = this.size;
@@ -118,7 +127,6 @@ cc.Class({
 
     this.selectedCell = this.grid[0][0];
 
-    this.node.emit("sudoku-changed");
   },
 
 
@@ -189,6 +197,7 @@ cc.Class({
     this.grid = [...Array(this.size)].map(e => Array(this.size).fill(null));
 
     this.node.on("sudoku-changed", (c) => {
+      this.checkErrors();
 
       if (gridsEqual(this.size, this.sudoku, this.sudoku_complete)) {
         cc.director.loadScene("GameFinished");
@@ -196,23 +205,8 @@ cc.Class({
       }
     });
 
-
-    this.node.on("sudoku-changed", (c) => {
-
-      let errors = allErrors(this.sudoku, this.box_sequence);
-
-      for (let i = 0; i < this.size; i++) {
-        for (let j = 0; j < this.size; j++) {
-          if (errors[i][j])
-            this.grid[i][j].setError(true);
-          else
-            this.grid[i][j].setError(false);
-        }
-      }
-    });
-
-
     this.renderGrid();
+    this.checkErrors();
     this.createBoxBorders();
   },
 

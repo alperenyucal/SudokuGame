@@ -57,7 +57,10 @@ cc.Class({
 
   start() {
     let labelNode = this.node.getChildByName("Label");
-    labelNode.color = this.isInitial ? cc.color(0, 0, 0) : cc.color(0, 0, 150);
+    if (!this.error)
+      labelNode.color = this.isInitial ? cc.color(0, 0, 0) : cc.color(0, 0, 150);
+    else
+      labelNode.color = cc.color(255, 0, 0);
   },
 
 });
