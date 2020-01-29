@@ -10,16 +10,17 @@ cc.Class({
         let index = Math.floor(Math.random() * 40);
 
         let newSudoku = jsonAsset.json[index]
+        let size = newSudoku.finalized.length;
         store.setState({
           currentSudoku: Object.assign(newSudoku, {
-            initials: newSudoku.finalized.map(row => row.map(i => { if (i != null) return true })),
+            initials: newSudoku.finalized.map(row => row.map(i => i != null)),
+            notes: [...Array(size)].map(() => [...Array(size)].map(() => [...Array(size)].fill(null))),
           }),
           currentTime: {
             mins: 0,
             secs: 0
           }
         });
-        store.saveState();
         scene.loadScene("SudokuGame");
       });
     });

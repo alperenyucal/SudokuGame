@@ -23,7 +23,7 @@ cc.Class({
 
     if (this.secs >= 60) {
       this.mins++;
-      this.secs = 0;
+      this.secs -= 60;
     }
 
     let ct = store.state.currentTime;

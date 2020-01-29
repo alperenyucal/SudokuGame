@@ -2,25 +2,29 @@ cc.Class({
   extends: cc.Component,
 
   properties: {
-    width: 50,
-    number: null,
     isInitial: false,
     error: false,
-    size: 9
   },
 
   ctor() {
     this.row = 0;
     this.column = 0;
-    this.notes = [...Array(this.size)].fill(null);
   },
 
-  setNumber(number, callback) {
+  setNote(number, position) {
+    if (!this.isInitial) {
+      let nts = this.node.getChildByName("Notes").getComponent("Notes");
+      nts.grid[position].string = number || "";
+    }
+  },
+
+  setNumber(number) {
     if (!this.isInitial) {
       this.number = number;
       let label = this.node.getChildByName("Label").getComponent(cc.Label);
-      label.string = this.number != null ? this.number : "";
-      typeof callback === 'function' && callback();
+      label.string = this.number || "";
+      let nts = this.node.getChildByName("Notes");
+      nts.active = this.number != null ? false : true;
     }
   },
 
@@ -42,6 +46,9 @@ cc.Class({
 
   onLoad() {
 
+    let nts = this.node.getChildByName("Notes").getComponent("Notes");
+    nts.notes = this.notes;
+
     this.node.width = this.node.height = this.width;
 
     let boxNode = new cc.Node("Box");
@@ -57,6 +64,9 @@ cc.Class({
 
   start() {
     let labelNode = this.node.getChildByName("Label");
+
+    if (this.isInitial) this.node.getChildByName("Notes").active = false;
+
     if (!this.error)
       labelNode.color = this.isInitial ? cc.color(0, 0, 0) : cc.color(0, 0, 150);
     else

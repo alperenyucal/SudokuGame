@@ -19,53 +19,66 @@ cc.Class({
     this.selectedCell;
     this.selectedButton = null;
     this.eraseMode = false;
+    this.noteMode = false;
   },
 
 
   setSudokuCell(row, column, number) {
+    this.grid[row][column].setNumber(number);
     this.sudoku[row][column] = number;
     store.setState({ currentSudoku: Object.assign({}, store.state.currentSudoku, { finalized: this.sudoku }) });
-    this.node.emit("sudoku-changed", {
-      row: row,
-      column: column,
-      number: number,
-      cell: this.grid[row][column]
-    });
+    this.node.emit("sudoku-changed");
+  },
+
+  setCellNote(row, column, number, position) {
+    // something like this
+    let ntscpy = JSON.parse(JSON.stringify(store.state.currentSudoku.notes));
+    ntscpy[row][column][position] = number;
+    store.setState({ currentSudoku: Object.assign({}, store.state.currentSudoku, { notes: ntscpy }) });
+    this.grid[row][column].setNote(number, position);
+    this.node.emit("sudoku-changed");
   },
 
 
   cellHandler(cell) {
-    if (this.eraseMode) {
-      cell.setNumber(null, () => {
+    if (this.eraseMode)
+      if (this.noteMode)
+        this.setCellNote(cell.row, cell.column, null, this.selectedButton.number - 1);
+      else
         this.setSudokuCell(cell.row, cell.column, null);
-      });
-    }
-    else if (this.inputMethod === "ButtonFirst") {
+
+    else if (this.inputMethod === "ButtonFirst")
       this.selectedCell = cell;
-    }
+
     else if (this.inputMethod === "CellFirst") {
       if (this.selectedButton != null) {
-        let number = cell.number == this.selectedButton.number ? null : this.selectedButton.number;
-        cell.setNumber(number, () => {
+        if (this.noteMode) {
+          let pos = this.selectedButton.number - 1;
+          let nts = store.state.currentSudoku.notes[cell.row][cell.column];
+          let number = nts[pos] == this.selectedButton.number ? null : this.selectedButton.number;
+          this.setCellNote(cell.row, cell.column, number, pos);
+        }
+        else {
+          let number = cell.number == this.selectedButton.number ? null : this.selectedButton.number;
           this.setSudokuCell(cell.row, cell.column, number);
-        });
+        }
       }
     };
   },
 
 
   buttonHandler(button) {
-    if (this.inputMethod === "ButtonFirst") {
+    if (this.inputMethod === "ButtonFirst") {/*
       let s = this.selectedCell;
       this.grid[s.row][s.column].setNumber(button.number, () => {
         this.setSudokuCell(cell.row, cell.column, button.number);
       })
-    }
+    */}
     else if (this.inputMethod === "CellFirst") {
       this.eraseMode = false;
+
       if (this.selectedButton != null)
         this.selectedButton.setSelected(false);
-
 
       if (this.selectedButton == button) {
         this.selectedButton = null;
@@ -93,6 +106,9 @@ cc.Class({
     let size = this.size;
     let width = this.node.width / size;
 
+    this.cellWidth = width;
+
+    let cs = store.state.currentSudoku;
     let sudoku = this.sudoku;
 
     let x = -this.node.width / 2;
@@ -106,6 +122,7 @@ cc.Class({
 
         cell.width = width;
         cell.setNumber(sudoku[i][j]);
+        cell.notes = cs.notes[i][j];
         cell.row = i;
         cell.column = j;
         cell.size = size;
@@ -196,13 +213,15 @@ cc.Class({
 
     this.grid = [...Array(this.size)].map(e => Array(this.size).fill(null));
 
-    this.node.on("sudoku-changed", (c) => {
+    this.node.on("sudoku-changed", () => {
       this.checkErrors();
 
       if (gridsEqual(this.size, this.sudoku, this.sudoku_complete)) {
         cc.director.loadScene("GameFinished");
         store.setState({ currentSudoku: null })
       }
+
+      console.log(store.state);
     });
 
     this.renderGrid();

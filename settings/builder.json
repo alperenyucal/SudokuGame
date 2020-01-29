@@ -47,5 +47,15 @@
     "subContext": ""
   },
   "xxteaKey": "becfaa67-6f36-40",
-  "zipCompressJs": true
+  "zipCompressJs": true,
+  "android": {
+    "packageName": "org.cocos2d.SudokuGame"
+  },
+  "ios": {
+    "packageName": "org.cocos2d.SudokuGame"
+  },
+  "mac": {
+    "packageName": "org.cocos2d.SudokuGame"
+  },
+  "win32": {}
 }
