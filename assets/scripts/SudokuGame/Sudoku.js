@@ -16,22 +16,24 @@ cc.Class({
 
 
   ctor() {
-    let cs = store.state.currentSudoku;
+    this.cs = store.state.currentSudoku;
 
     this.selectedCell;
     this.selectedButton = null;
     this.eraseMode = false;
     this.noteMode = false;
-    this.size = cs.finalized.length;
+    this.size = this.cs.finalized.length;
 
   },
 
 
   setSudokuCell(row, column, number) {
-    this.grid[row][column].setNumber(number);
-    let sdkcpy = JSON.parse(JSON.stringify(store.state.currentSudoku.finalized));
-    sdkcpy[row][column] = number;
-    store.setState({ currentSudoku: Object.assign({}, store.state.currentSudoku, { finalized: sdkcpy }) });
+    if (!this.cs.initials[row][column]) {
+      this.grid[row][column].setNumber(number);
+      let sdkcpy = JSON.parse(JSON.stringify(store.state.currentSudoku.finalized));
+      sdkcpy[row][column] = number;
+      store.setState({ currentSudoku: Object.assign({}, store.state.currentSudoku, { finalized: sdkcpy }) });
+    }
     this.node.emit("sudoku-changed");
   },
 
