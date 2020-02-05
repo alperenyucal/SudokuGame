@@ -8,10 +8,6 @@ const Store = class {
   saveState() {
     cc.sys.localStorage.setItem("state", JSON.stringify(this.state));
   }
-  // saved games
-  // current game
-  // user info
-  // other stuff
 
   setState(newState) {
     Object.assign(this.state, newState);

@@ -10,9 +10,12 @@ cc.Class({
           sc.selectedButton = null;
         }
         sc.eraseMode = true;
+        this.node.opacity = 255;
       }
-      else
+      else {
         sc.eraseMode = false;
+        this.node.opacity = 150;
+      }
     });
   },
 

@@ -12,7 +12,7 @@ cc.Class({
   onLoad() {
     let sc = cc.find("Canvas/Sudoku").getComponent("Sudoku");
 
-    let margin = 2;
+    let margin = 5;
 
     this.size = sc.size;
     this.grid = [...Array(this.size)];

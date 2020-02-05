@@ -1011,7 +1011,7 @@
         "__id__": 24
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 29
@@ -1402,7 +1402,7 @@
       }
     ],
     "_prefab": null,
-    "_opacity": 255,
+    "_opacity": 150,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -1783,7 +1783,7 @@
       }
     ],
     "_prefab": null,
-    "_opacity": 255,
+    "_opacity": 150,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -1805,8 +1805,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        142.531,
-        -267.451,
+        135,
+        -270,
         0,
         0,
         0,

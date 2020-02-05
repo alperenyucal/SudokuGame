@@ -12,7 +12,7 @@ cc.Class({
   },
 
   setNote(number, position) {
-    if (!this.isInitial) {
+    if (!this.isInitial && this.number == null) {
       let nts = this.node.getChildByName("Notes").getComponent("Notes");
       nts.grid[position].string = number || "";
     }
