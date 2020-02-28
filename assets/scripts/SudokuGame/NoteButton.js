@@ -8,7 +8,6 @@ cc.Class({
       let sc = cc.find("Canvas/Sudoku").getComponent("Sudoku");
       sc.noteMode = !sc.noteMode;
       this.node.opacity = sc.noteMode ? 255 : 150;
-      console.log(sc.noteMode);
     });
   },
 

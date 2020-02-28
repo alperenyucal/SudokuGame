@@ -17,7 +17,7 @@ cc.Class({
     this.size = sc.size;
     this.grid = [...Array(this.size)];
 
-    let sqrt = Math.floor(Math.sqrt(this.size))
+    let sqrt = Math.floor(Math.sqrt(this.size)) + 1;
     let width = (sc.cellWidth - (margin * 2)) / sqrt;
     let x = (width / 2) + margin;
     let y = sc.cellWidth - (width / 2) - margin;

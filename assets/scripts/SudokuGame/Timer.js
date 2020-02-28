@@ -10,7 +10,7 @@ cc.Class({
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
-    let ct = store.state.currentTime;
+    let ct = state.currentTime;
     this.mins = ct.mins;
     this.secs = ct.secs;
   },
@@ -26,15 +26,13 @@ cc.Class({
       this.secs -= 60;
     }
 
-    let ct = store.state.currentTime;
+    let ct = state.currentTime;
 
     if ((this.mins * 60 + this.secs) > (ct.mins * 60 + ct.secs)) {
-      store.setState({
-        currentTime: {
-          mins: this.mins,
-          secs: this.secs
-        }
-      })
+      state.currentTime = {
+        mins: this.mins,
+        secs: this.secs
+      }
     }
 
     let t = this.secs >= 10 ? Math.floor(this.secs) : "0".concat(Math.floor(this.secs).toString());

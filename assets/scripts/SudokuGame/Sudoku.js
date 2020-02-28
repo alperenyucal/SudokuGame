@@ -16,13 +16,12 @@ cc.Class({
 
 
   ctor() {
-    this.cs = store.state.currentSudoku;
+    this.cs = state.currentSudoku;
 
     this.selectedCell;
     this.selectedButton = null;
     this.eraseMode = false;
     this.noteMode = false;
-    this.size = this.cs.finalized.length;
 
   },
 
@@ -30,20 +29,17 @@ cc.Class({
   setSudokuCell(row, column, number) {
     if (!this.cs.initials[row][column]) {
       this.grid[row][column].setNumber(number);
-      let sdkcpy = JSON.parse(JSON.stringify(store.state.currentSudoku.finalized));
-      sdkcpy[row][column] = number;
-      store.setState({ currentSudoku: Object.assign({}, store.state.currentSudoku, { finalized: sdkcpy }) });
+      this.cs.sudoku[row][column] = number;
     }
     this.node.emit("sudoku-changed");
   },
 
   setCellNote(row, column, number, position) {
-    // something like this
-    let ntscpy = JSON.parse(JSON.stringify(store.state.currentSudoku.notes));
-    ntscpy[row][column][position] = number;
-    store.setState({ currentSudoku: Object.assign({}, store.state.currentSudoku, { notes: ntscpy }) });
-    this.grid[row][column].setNote(number, position);
-    this.node.emit("sudoku-changed");
+    if (!this.cs.initials[row][column]) {
+      this.cs.notes[row][column][position] = number;
+      this.grid[row][column].setNote(number, position);
+      this.node.emit("sudoku-changed");
+    }
   },
 
 
@@ -61,7 +57,7 @@ cc.Class({
       if (this.selectedButton != null) {
         if (this.noteMode) {
           let pos = this.selectedButton.number - 1;
-          let nts = store.state.currentSudoku.notes[cell.row][cell.column];
+          let nts = state.currentSudoku.notes[cell.row][cell.column];
           let number = nts[pos] == this.selectedButton.number ? null : this.selectedButton.number;
           this.setCellNote(cell.row, cell.column, number, pos);
         }
@@ -100,44 +96,37 @@ cc.Class({
 
 
   checkErrors() {
-    let cs = store.state.currentSudoku
-    let size = cs.finalized.length;
-    let errors = allErrors(cs.finalized, cs.box_sequence);
+    let errors = allErrors(this.cs.sudoku, this.cs.region_sequence);
 
-    for (let i = 0; i < size; i++)
-      for (let j = 0; j < size; j++)
+    for (let i = 0; i < this.size; i++)
+      for (let j = 0; j < this.size; j++)
         this.grid[i][j].setError(errors[i][j]);
 
   },
 
   renderGrid() {
 
-    let cs = store.state.currentSudoku;
-
-    let size = cs.finalized.length;
-    let width = this.node.width / size;
+    let width = this.node.width / this.size;
 
     this.cellWidth = width;
-
-    let sudoku = cs.finalized;
 
     let x = -this.node.width / 2;
     let y = this.node.width / 2 - width;
 
-    for (let i = 0; i < size; i++) {
-      for (let j = 0; j < size; j++) {
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
 
         let cellNode = cc.instantiate(this.cellPrefab);
         let cell = cellNode.getComponent("Cell");
 
         cell.width = width;
-        cell.setNumber(sudoku[i][j]);
-        cell.notes = cs.notes[i][j];
+        cell.setNumber(this.cs.sudoku[i][j]);
+        cell.notes = this.cs.notes[i][j];
         cell.row = i;
         cell.column = j;
-        cell.size = size;
+        cell.size = this.size;
 
-        cell.isInitial = cs.initials[i][j];
+        cell.isInitial = this.cs.initials[i][j];
 
         cellNode.name = "cell" + i.toString() + j.toString();
         cellNode.setPosition(x, y);
@@ -158,40 +147,37 @@ cc.Class({
 
 
   createBoxBorders() {
-    let cs = store.state.currentSudoku;
 
-    let box_sequence = cs.box_sequence;
     let node = new cc.Node("Box-Borders");
     node.parent = this.node;
 
     let ctx = node.addComponent(cc.Graphics);
 
-    let size = box_sequence.length
 
     let x;
     let y = -1 * this.node.width / 2;
-    let w = this.node.width / size;
+    let w = this.node.width / this.size;
 
-    for (let i = size - 1; i >= 0; --i) {
+    for (let i = this.size - 1; i >= 0; --i) {
       x = -1 * this.node.width / 2;
-      for (let j = 0; j < size; j++) {
+      for (let j = 0; j < this.size; j++) {
 
-        if (i === 0 || box_sequence[i][j] !== box_sequence[i - 1][j]) {
+        if (i === 0 || this.cs.region_sequence[i][j] !== this.cs.region_sequence[i - 1][j]) {
           ctx.moveTo(x, y + w);
           ctx.lineTo(x + w, y + w);
         }
 
-        if (j === 0 || box_sequence[i][j] !== box_sequence[i][j - 1]) {
+        if (j === 0 || this.cs.region_sequence[i][j] !== this.cs.region_sequence[i][j - 1]) {
           ctx.moveTo(x, y);
           ctx.lineTo(x, y + w);
         }
 
-        if (i === size - 1 || box_sequence[i][j] !== box_sequence[i + 1][j]) {
+        if (i === this.size - 1 || this.cs.region_sequence[i][j] !== this.cs.region_sequence[i + 1][j]) {
           ctx.moveTo(x, y);
           ctx.lineTo(x + w, y);
         }
 
-        if (j === size - 1 || box_sequence[i][j] !== box_sequence[i][j + 1]) {
+        if (j === this.size - 1 || this.cs.region_sequence[i][j] !== this.cs.region_sequence[i][j + 1]) {
           ctx.moveTo(x + w, y);
           ctx.lineTo(x + w, y + w);
         }
@@ -209,26 +195,21 @@ cc.Class({
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
-    let cs = store.state.currentSudoku;
-    this.size = cs.finalized.length;
+    this.size = this.cs.sudoku.length;
   },
 
 
   start() {
-    let cs = store.state.currentSudoku;
-    let size = cs.finalized.length;
 
-    this.grid = [...Array(size)].map(e => Array(size).fill(null));
+    this.grid = [...Array(this.size)].map(e => Array(this.size).fill(null));
 
     this.node.on("sudoku-changed", () => {
       this.checkErrors();
 
-      if (gridsEqual(cs.finalized.length, cs.finalized, cs.sudoku)) {
+      if (JSON.stringify(this.cs.sudoku) == JSON.stringify(this.cs.sudoku_complete)) {
+        state.currentSudoku = null
         cc.director.loadScene("GameFinished");
-        store.setState({ currentSudoku: null })
       }
-
-      console.log(store.state);
     });
 
     this.renderGrid();

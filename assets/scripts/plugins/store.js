@@ -1,25 +1,12 @@
-const Store = class {
-
-  constructor(initialState) {
-    this.state = initialState;
-  };
-
-
-  saveState() {
-    cc.sys.localStorage.setItem("state", JSON.stringify(this.state));
-  }
-
-  setState(newState) {
-    Object.assign(this.state, newState);
-  }
-}
-
 let savedState = JSON.parse(cc.sys.localStorage.getItem("state"));
 
-window.store = savedState != null ? new Store(savedState) : new Store({});
+window.state = savedState || {
+  currentSudoku: null,
+  currentTime: null,
+};
 
 let saveLocal = () => {
-  store.saveState();
+  cc.sys.localStorage.setItem("state", JSON.stringify(this.state));
   setTimeout(saveLocal, 5000);
 }
 
