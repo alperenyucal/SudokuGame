@@ -16,7 +16,6 @@ cc.Class({
 
 
   ctor() {
-    this.cs = state.currentSudoku;
 
     this.selectedCell;
     this.selectedButton = null;
@@ -195,6 +194,7 @@ cc.Class({
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
+    this.cs = state.currentSudoku;
     this.size = this.cs.sudoku.length;
   },
 
@@ -207,7 +207,7 @@ cc.Class({
       this.checkErrors();
 
       if (JSON.stringify(this.cs.sudoku) == JSON.stringify(this.cs.sudoku_complete)) {
-        state.currentSudoku = null
+        state.currentSudoku = null;
         cc.director.loadScene("GameFinished");
       }
     });

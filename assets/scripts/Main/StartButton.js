@@ -8,9 +8,11 @@ cc.Class({
 
       let sz = Math.floor(Math.random() * 5) + 5;
       let id = Math.floor(Math.random() * 20) + 1;
-      cc.loader.loadRes("data/sudoku-" + sz + "-" + id, function (err, jsonAsset) {
 
-        let newSudoku = jsonAsset.json
+
+      cc.loader.loadRes("data/sudoku-" + sz + "-" + id, function (err, textAsset) {
+
+        let newSudoku = JSON.parse(textAsset.text);
         let size = newSudoku.sudoku.length;
 
         state = {
