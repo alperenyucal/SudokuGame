@@ -3,6 +3,7 @@ let savedState = JSON.parse(cc.sys.localStorage.getItem("state"));
 window.state = savedState || {
   currentSudoku: null,
   currentTime: null,
+  paused: null,
 };
 
 let saveLocal = () => {

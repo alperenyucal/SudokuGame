@@ -5,8 +5,7 @@ const Scene = class {
 
 	loadScene(sceneName, callback) {
 		if (this.sceneStack.length == 0) {
-			this.mainScene = cc.director.getScene().name;
-			this.sceneStack.push(this.mainScene);
+			this.sceneStack.push(cc.director.getScene().name);
 		}
 
 		cc.director.loadScene(sceneName, callback);
@@ -25,12 +24,11 @@ const Scene = class {
 	}
 
 	goHome() {
-		cc.director.loadScene(this.mainScene);
+		cc.director.loadScene(this.sceneStack[0]);
 		this.clear();
 	}
 
 	clear() {
-		this.mainScene = null;
 		this.sceneStack = [];
 	}
 

@@ -21,7 +21,6 @@ cc.Class({
     this.selectedButton = null;
     this.eraseMode = false;
     this.noteMode = false;
-
   },
 
 
@@ -43,26 +42,29 @@ cc.Class({
 
 
   cellHandler(cell) {
-    if (this.eraseMode)
-      if (this.noteMode)
-        this.setCellNote(cell.row, cell.column, null, this.selectedButton.number - 1);
-      else
-        this.setSudokuCell(cell.row, cell.column, null);
+    if (!state.paused) {
 
-    else if (this.inputMethod === "ButtonFirst")
-      this.selectedCell = cell;
+      if (this.eraseMode)
+        if (this.noteMode)
+          this.setCellNote(cell.row, cell.column, null, this.selectedButton.number - 1);
+        else
+          this.setSudokuCell(cell.row, cell.column, null);
 
-    else if (this.inputMethod === "CellFirst") {
-      if (this.selectedButton != null) {
-        if (this.noteMode) {
-          let pos = this.selectedButton.number - 1;
-          let nts = state.currentSudoku.notes[cell.row][cell.column];
-          let number = nts[pos] == this.selectedButton.number ? null : this.selectedButton.number;
-          this.setCellNote(cell.row, cell.column, number, pos);
-        }
-        else {
-          let number = cell.number == this.selectedButton.number ? null : this.selectedButton.number;
-          this.setSudokuCell(cell.row, cell.column, number);
+      else if (this.inputMethod === "ButtonFirst")
+        this.selectedCell = cell;
+
+      else if (this.inputMethod === "CellFirst") {
+        if (this.selectedButton != null) {
+          if (this.noteMode) {
+            let pos = this.selectedButton.number - 1;
+            let nts = state.currentSudoku.notes[cell.row][cell.column];
+            let number = nts[pos] == this.selectedButton.number ? null : this.selectedButton.number;
+            this.setCellNote(cell.row, cell.column, number, pos);
+          }
+          else {
+            let number = cell.number == this.selectedButton.number ? null : this.selectedButton.number;
+            this.setSudokuCell(cell.row, cell.column, number);
+          }
         }
       }
     };
@@ -70,25 +72,27 @@ cc.Class({
 
 
   buttonHandler(button) {
-    if (this.inputMethod === "ButtonFirst") {/*
+    if (!state.paused) {
+      if (this.inputMethod === "ButtonFirst") {/*
       let s = this.selectedCell;
       this.grid[s.row][s.column].setNumber(button.number, () => {
         this.setSudokuCell(cell.row, cell.column, button.number);
       })
     */}
-    else if (this.inputMethod === "CellFirst") {
-      this.eraseMode = false;
+      else if (this.inputMethod === "CellFirst") {
+        this.eraseMode = false;
 
-      if (this.selectedButton != null)
-        this.selectedButton.setSelected(false);
+        if (this.selectedButton != null)
+          this.selectedButton.setSelected(false);
 
-      if (this.selectedButton == button) {
-        this.selectedButton = null;
-        button.setSelected(false);
-      }
-      else {
-        this.selectedButton = button
-        button.setSelected(true);
+        if (this.selectedButton == button) {
+          this.selectedButton = null;
+          button.setSelected(false);
+        }
+        else {
+          this.selectedButton = button
+          button.setSelected(true);
+        }
       }
     }
   },
@@ -106,8 +110,6 @@ cc.Class({
   renderGrid() {
 
     let width = this.node.width / this.size;
-
-    this.cellWidth = width;
 
     let x = -this.node.width / 2;
     let y = this.node.width / 2 - width;
@@ -152,7 +154,6 @@ cc.Class({
 
     let ctx = node.addComponent(cc.Graphics);
 
-
     let x;
     let y = -1 * this.node.width / 2;
     let w = this.node.width / this.size;
@@ -196,12 +197,20 @@ cc.Class({
   onLoad() {
     this.cs = state.currentSudoku;
     this.size = this.cs.sudoku.length;
+
+    this.grid = [...Array(this.size)].map(e => Array(this.size).fill(null));
+    this.createBoxBorders();
+    this.renderGrid();
+    this.checkErrors();
+  },
+
+  onDestroy() {
+    state.paused = true;
   },
 
 
   start() {
 
-    this.grid = [...Array(this.size)].map(e => Array(this.size).fill(null));
 
     this.node.on("sudoku-changed", () => {
       this.checkErrors();
@@ -212,9 +221,8 @@ cc.Class({
       }
     });
 
-    this.renderGrid();
-    this.checkErrors();
-    this.createBoxBorders();
+
+
   },
 
 });

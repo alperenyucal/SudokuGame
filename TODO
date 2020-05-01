@@ -1,8 +1,6 @@
 TODO
-add notes
 add selected number highlighting
 add settings
-add pause
 add CellFirst input method
 add utility buttons
 expand the menu
@@ -15,6 +13,8 @@ fix scene load delay
 
 
 DONE
+add pause
+add notes
 add timer
 add error checking
 design the store

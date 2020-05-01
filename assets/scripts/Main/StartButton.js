@@ -23,7 +23,8 @@ cc.Class({
           currentTime: {
             mins: 0,
             secs: 0
-          }
+          },
+          paused: true
         };
 
         scene.loadScene("SudokuGame");
